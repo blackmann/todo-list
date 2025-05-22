@@ -2,6 +2,7 @@ import clsx from "clsx";
 import React from "react";
 import { age } from "~/lib/dates";
 import type { Task } from "~/lib/types";
+import { Status } from "./status";
 import { TaskComments } from "./task-comments";
 
 // TODO: on hover the status bar should show who created the task and when
@@ -26,18 +27,7 @@ export function TodoItem({ task }: Props) {
 				// biome-ignore lint/a11y/noNoninteractiveTabindex: <explanation>
 				tabIndex={0}
 			>
-				<div
-					className={clsx(
-						"size-6 rounded-full border-2 border-stone-300 dark:border-neutral-700 flex items-center justify-center",
-						{
-							"!border-amber-500": task.status === "inProgress",
-						},
-					)}
-				>
-					{task.status === "done" && (
-						<div className="i-lucide-check opacity-50" />
-					)}
-				</div>
+				<Status task={task} />
 
 				<div className="flex-1">
 					<div className="flex items-center justify-between">
@@ -65,7 +55,7 @@ export function TodoItem({ task }: Props) {
 					<div className="text-sm text-secondary">{age(task.createdAt)}</div>
 
 					<div className="flex gap-1 text-sm items-center text-secondary">
-						<div className="i-solar-chat-line-line-duotone" /> {task.comments}
+						<div className="i-solar-chat-line-line-duotone" /> {task.comments || 0}
 					</div>
 				</div>
 			</div>

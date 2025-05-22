@@ -4,7 +4,7 @@ export function StatusBar() {
 			<div className="flex items-center gap-2">
 				<div className="flex items-center gap-2">
 					<div className="i-solar-archive-minimalistic-broken opacity-80" />
-					1120 tasks. 43% done.
+					1120 tasks. 43% done. <span className="font-bold">||||<span className="opacity-50">||||||</span></span>
 				</div>
 			</div>
 

@@ -14,6 +14,7 @@
     "migrate": "prisma migrate deploy"
   },
   "dependencies": {
+    "@floating-ui/react": "^0.27.8",
     "@iconify-json/lucide": "^1.2.39",
     "@iconify-json/solar": "^1.2.2",
     "@iconify-json/svg-spinners": "^1.2.2",

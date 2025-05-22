@@ -12,6 +12,9 @@
 			},
 			"a11y": {
 				"noLabelWithoutControl": "off"
+			},
+			"suspicious": {
+				"noExplicitAny": "off"
 			}
 		}
 	}

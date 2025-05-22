@@ -44,7 +44,7 @@ export function TaskComposer({ onNewEntry }: Props) {
 
 	return (
 		<form
-			className="flex gap-4 p-2 bg-stone-200 dark:bg-neutral-800 relative"
+			className="flex gap-4 p-2 bg-stone-200/60 dark:bg-neutral-800/60 relative"
 			onSubmit={handleSubmit}
 			ref={formRef}
 		>
