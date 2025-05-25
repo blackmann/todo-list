@@ -19,7 +19,7 @@ function InviteCard({ onClose }: InviteCardProps) {
 		}
 	}, [fetcher.state, fetcher.load]);
 
-	const token = fetcher.data.token ?? null;
+	const token = fetcher.data?.token;
 	const inviteLink = token ? `${window.location.origin}/invite/${token}` : "";
 
 	return (
