@@ -1,6 +1,6 @@
 import clsx from "clsx";
-import { Button } from "./button";
 import { useMounted } from "~/lib/use-mounted";
+import { Button } from "./button";
 
 interface Props {
 	onClick: VoidFunction;
@@ -17,7 +17,7 @@ export function LoadingButton({ onClick, isLoading, done }: Props) {
 
 	return (
 		<Button
-			className="bg-zinc-200 light:text-zinc-500 dark:bg-neutral-100 dark:bg-neutral-800"
+			className="bg-stone-200 light:text-stone-500 dark:bg-neutral-100 dark:bg-neutral-800"
 			onClick={onClick}
 			disabled={isLoading || done}
 		>

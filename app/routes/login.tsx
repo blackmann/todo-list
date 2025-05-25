@@ -1,12 +1,12 @@
+import argon2 from "argon2";
+import { type FieldValues, useForm } from "react-hook-form";
 import {
     type ActionFunctionArgs,
     type LoaderFunctionArgs,
     type MetaFunction,
     redirect,
+    useActionData, useLoaderData, useSubmit,
 } from "react-router";
-import { useActionData, useLoaderData, useSubmit } from "react-router";
-import argon2 from "argon2";
-import { type FieldValues, useForm } from "react-hook-form";
 import { Button } from "~/components/button";
 import { Input } from "~/components/input";
 import { checkAuth } from "~/lib/check-auth";
@@ -90,7 +90,7 @@ export default function Login() {
 
 	return (
 		<div className="flex h-screen w-screen items-center justify-center">
-			<div className="w-74 rounded-lg border border-gray-200 bg-zinc-50 dark:(bg-neutral-900 border-neutral-800) shadow-lg -mt-10rem">
+			<div className="w-74 rounded-lg border border-gray-200 bg-stone-50 dark:(bg-neutral-900 border-neutral-800) shadow-lg -mt-10rem">
 				<div className="p-4">
 					<h1 className=" font-medium">
 						{userCreated ? "Login" : "Super User"}
@@ -141,10 +141,10 @@ export default function Login() {
 					</form>
 				</div>
 
-				<div className="border-t dark:border-neutral-800 bg-zinc-200/40 dark:bg-neutral-800/30 px-4 py-2 flex justify-end">
+				<div className="border-t dark:border-neutral-800 bg-stone-200/40 dark:bg-neutral-800/30 px-4 py-2 flex justify-end">
 					<a
 						href="https://github.com/blackmann/todo-list"
-						className="flex items-center gap-1 bg-zinc-200 dark:bg-neutral-800 px-2 py-1 rounded-xl text-secondary font-mono text-sm font-medium"
+						className="flex items-center gap-1 bg-stone-200 dark:bg-neutral-800 px-2 py-1 rounded-xl text-secondary font-mono text-sm font-medium"
 						target="_blank"
 						rel="noreferrer"
 					>
