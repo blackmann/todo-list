@@ -1,4 +1,4 @@
-import { useLoaderData } from "@remix-run/react";
+import { useLoaderData } from "react-router";
 import React from "react";
 import { useComments } from "~/lib/use-comments";
 import type { loader } from "~/routes/_index";

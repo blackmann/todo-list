@@ -1,4 +1,4 @@
-import type { LoaderFunctionArgs } from "@remix-run/node";
+import type { LoaderFunctionArgs } from "react-router";
 import { checkAuth } from "~/lib/check-auth";
 import { prisma } from "~/lib/prisma.server";
 

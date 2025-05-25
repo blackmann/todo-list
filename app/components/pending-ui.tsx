@@ -1,4 +1,4 @@
-import { useNavigation } from "@remix-run/react";
+import { useNavigation } from "react-router";
 import React from "react";
 
 function PendingUI() {

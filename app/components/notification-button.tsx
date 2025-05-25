@@ -1,4 +1,4 @@
-import { useLoaderData } from "@remix-run/react";
+import { useLoaderData } from "react-router";
 import clsx from "clsx";
 import parse from "html-react-parser";
 import { TASK_MENTION_REGEX, USER_MENTION_REGEX } from "~/lib/constants";

@@ -1,4 +1,4 @@
-import { createCookie } from "@remix-run/node";
+import { createCookie } from "react-router";
 
 export const MAX_COOKIE_AGE = 60 * 60 * 24 * 14; // 14 days
 

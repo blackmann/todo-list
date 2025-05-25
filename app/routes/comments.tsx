@@ -1,4 +1,4 @@
-import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
 import { prisma } from "~/lib/prisma.server";
 import { render } from "~/lib/render.server";
 import { badRequest } from "~/lib/responses";

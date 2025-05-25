@@ -1,4 +1,4 @@
-import { Link, useLoaderData, useNavigate } from "@remix-run/react";
+import { Link, useLoaderData, useNavigate } from "react-router";
 import type { loader } from "~/routes/_index";
 import { Popover, PopoverContent, PopoverTrigger } from "./popover";
 

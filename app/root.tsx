@@ -2,13 +2,7 @@ import "@unocss/reset/tailwind-compat.css";
 import "virtual:uno.css";
 import "./styles.css";
 
-import {
-	Links,
-	Meta,
-	Outlet,
-	Scripts,
-	ScrollRestoration,
-} from "@remix-run/react";
+import { Links, Meta, Outlet, Scripts, ScrollRestoration } from "react-router";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { PendingUI } from "./components/pending-ui";
 

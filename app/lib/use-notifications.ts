@@ -1,4 +1,4 @@
-import { useRevalidator } from "@remix-run/react";
+import { useRevalidator } from "react-router";
 import { useInfiniteQuery, useMutation } from "@tanstack/react-query";
 
 export function useNotifications() {

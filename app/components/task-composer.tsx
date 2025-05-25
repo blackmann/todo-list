@@ -1,4 +1,4 @@
-import { useLoaderData, useRevalidator } from "@remix-run/react";
+import { useLoaderData, useRevalidator } from "react-router";
 import React from "react";
 import { useTasks } from "~/lib/use-tasks";
 import type { loader } from "~/routes/_index";

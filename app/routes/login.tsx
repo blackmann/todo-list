@@ -1,10 +1,10 @@
 import {
-	type ActionFunctionArgs,
-	type LoaderFunctionArgs,
-	type MetaFunction,
-	redirect,
-} from "@remix-run/node";
-import { useActionData, useLoaderData, useSubmit } from "@remix-run/react";
+    type ActionFunctionArgs,
+    type LoaderFunctionArgs,
+    type MetaFunction,
+    redirect,
+} from "react-router";
+import { useActionData, useLoaderData, useSubmit } from "react-router";
 import argon2 from "argon2";
 import { type FieldValues, useForm } from "react-hook-form";
 import { Button } from "~/components/button";

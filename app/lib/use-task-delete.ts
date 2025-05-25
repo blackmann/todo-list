@@ -1,6 +1,6 @@
 import type { Task } from "@prisma/client";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useRevalidator } from "react-router-dom";
+import { useRevalidator } from "react-router";
 
 export function useTaskDelete(task: Task) {
 	const queryClient = useQueryClient();

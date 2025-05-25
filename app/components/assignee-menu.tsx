@@ -1,4 +1,4 @@
-import { useLoaderData } from "@remix-run/react";
+import { useLoaderData } from "react-router";
 import clsx from "clsx";
 import type { Task } from "~/lib/types";
 import type { loader } from "~/routes/_index";
