@@ -19,7 +19,8 @@ function InviteCard({ onClose }: InviteCardProps) {
 		}
 	}, [fetcher.state, fetcher.load]);
 
-	const inviteLink = fetcher.data?.url || "Loading...";
+	const token = fetcher.data.token ?? null;
+	const inviteLink = token ? `${window.location.origin}/invite/${token}` : "";
 
 	return (
 		<div className="text-sm">
@@ -37,14 +38,14 @@ function InviteCard({ onClose }: InviteCardProps) {
 
 				<Input
 					readOnly
-					value={inviteLink}
+					value={token ? inviteLink : "Loading..."}
 					className="w-full rounded-lg font-mono border border-neutral-300 dark:border-neutral-700 bg-stone-200 dark:bg-neutral-800 px-2 py-1.5 text-sm truncate"
 				/>
 
 				<div className="flex flex-col gap-0">
 					<CopyButton
 						text={inviteLink}
-						disabled={fetcher.state !== "idle" || !fetcher.data}
+						disabled={fetcher.state !== "idle" || !token}
 					/>
 					<span className="text-secondary font-mono ms-1 text-.65rem">
 						Single-use link, expires in 12hrs

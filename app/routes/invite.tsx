@@ -1,7 +1,7 @@
 import { getInviteLink } from "~/lib/get-invite-link";
 
 export const loader = async () => {
-	const url = await getInviteLink();
+	const token = await getInviteLink();
 
-	return { url };
+	return { token };
 };

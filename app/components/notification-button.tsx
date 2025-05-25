@@ -96,7 +96,14 @@ function NotificationItem({ notification }: { notification: Notification }) {
 			</header>
 			<div className="text-start flex gap-2">
 				<div className="pt-1">
-					<div className="i-solar-user-hands-line-duotone text-secondary" />
+					<div
+						className={clsx({
+							"i-solar-hand-shake-line-duotone text-secondary":
+								notification.type === "new_member",
+							"i-solar-user-hands-line-duotone text-secondary":
+								notification.type !== "new_member",
+						})}
+					/>
 				</div>
 				<div className="flex-1">{parse(convert(notification))}</div>
 			</div>

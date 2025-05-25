@@ -13,7 +13,5 @@ export async function getInviteLink() {
 		},
 	});
 
-	const url = process.env.BASE_URL || "http://localhost:5173";
-
-	return `${url}/invite/${token}`;
+	return token;
 }
