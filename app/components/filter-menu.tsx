@@ -26,7 +26,7 @@ function FilterMenu() {
 							},
 						)}
 					>
-						<div className={clsx("size-5", s.icon)} />
+						<div className="text-xl">{s.icon}</div>
 
 						<button
 							type="button"
