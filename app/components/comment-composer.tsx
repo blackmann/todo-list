@@ -1,5 +1,5 @@
-import { useLoaderData } from "react-router";
 import React from "react";
+import { useLoaderData } from "react-router";
 import { useComments } from "~/lib/use-comments";
 import type { loader } from "~/routes/_index";
 
@@ -34,14 +34,21 @@ export function CommentComposer({ taskId }: Props) {
 					e.currentTarget.requestSubmit();
 				}
 			}}
+			className="relative"
 		>
-			<textarea
-				className="w-full bg-transparent border-none outline-none focus:outline-none focus:ring-0 p-0"
-				placeholder="Add a comment"
-				name="content"
-				rows={3}
-				ref={inputRef}
-			/>
+			{create.isPending && (
+				<div className="absolute top-2 right-2 i-svg-spinners-270-ring text-secondary" />
+			)}
+
+			<div className="flex w-full items-center">
+				<textarea
+					className="flex-1 bg-transparent border-none outline-none focus:outline-none focus:ring-0 p-0"
+					placeholder="Add a comment"
+					name="content"
+					rows={3}
+					ref={inputRef}
+				/>
+			</div>
 
 			<div className="text-sm text-secondary flex justify-between gap-4">
 				<div className="flex items-center gap-2">
