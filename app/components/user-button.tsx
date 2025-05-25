@@ -1,4 +1,4 @@
-import { Link, useLoaderData } from "@remix-run/react";
+import { Link, useLoaderData, useNavigate } from "@remix-run/react";
 import type { loader } from "~/routes/_index";
 import { Popover, PopoverContent, PopoverTrigger } from "./popover";
 
@@ -26,6 +26,14 @@ export function UserButton() {
 
 function UserMenu() {
 	const { user } = useLoaderData<typeof loader>();
+	const navigate = useNavigate();
+
+	const handleLogout = () => {
+		const confirmed = window.confirm("Are you sure you want to logout?");
+		if (confirmed) {
+			navigate("/logout");
+		}
+	};
 
 	return (
 		<div className="bg-stone-50 dark:(bg-neutral-900 border-neutral-800) min-w-12rem rounded-lg overflow-hidden border shadow-lg">
@@ -51,9 +59,14 @@ function UserMenu() {
 				</li>
 
 				<li>
-					<Link className="block px-2 py-1" to="/logout">
+					<button
+						type="button"
+						onClick={handleLogout}
+						className="block w-full px-2 py-1 text-left flex gap-2 items-center text-red-600 bg-neutral-900"
+					>
+						<div className="i-solar-logout-2-outline" />
 						Logout
-					</Link>
+					</button>
 				</li>
 			</ul>
 		</div>
