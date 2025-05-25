@@ -19,7 +19,7 @@ export function useTasks({ assigneeId, search, status }: TaskProps = {}) {
 	const { revalidate } = useRevalidator();
 
 	const tasksQuery = useInfiniteQuery({
-		queryKey: ["tasks", { assigneeId, search, status }] as const,
+		queryKey: ["tasks", assigneeId, search, status] as const,
 		queryFn: fetchTasks,
 		getNextPageParam: (lastPage, pages) =>
 			lastPage.length === 0 ? undefined : pages.length,
@@ -43,9 +43,9 @@ export async function fetchTasks({
 	pageParam = 0,
 	queryKey,
 }: QueryFunctionContext<
-	readonly [string, { assigneeId?: string; search?: string; status?: Status }]
+	readonly [string, assigneeId?: string, search?: string, status?: Status]
 >) {
-	const [, { assigneeId, search, status: filterStatus }] = queryKey;
+	const [, assigneeId, search, filterStatus] = queryKey;
 	const params = new URLSearchParams({ page: String(pageParam) });
 
 	if (assigneeId) params.set("assigneeId", assigneeId);

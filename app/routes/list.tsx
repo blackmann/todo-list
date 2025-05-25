@@ -7,10 +7,12 @@ import { badRequest, notFound } from "~/lib/responses";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
 	const url = new URL(request.url);
-	const page = Number(url.searchParams.get("page")) || 0;
-	const search = url.searchParams.get("search") || "";
-	const assigneeId = url.searchParams.get("assigneeId") || undefined;
-	const status = url.searchParams.get("status") || undefined;
+	const searchParams = url.searchParams;
+
+	const page = Number(searchParams.get("page")) || 0;
+	const search = searchParams.get("search") || "";
+	const assigneeId = searchParams.get("assigneeId") || undefined;
+	const status = searchParams.get("status") || undefined;
 
 	const tasks = await prisma.task.findMany({
 		where: {
