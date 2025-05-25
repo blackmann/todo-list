@@ -24,9 +24,10 @@ export default defineConfig({
 		"bg-blue-700 bg-opacity-10",
 		"rounded-lg",
 		"px-1",
-		"bg-red-600",
+		"bg-red-500",
 		"bg-orange-400",
 		"bg-stone-400",
 		"text-white",
+		"dark:bg-stone-700",
 	],
 });

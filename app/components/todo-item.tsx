@@ -1,15 +1,14 @@
-import clsx from "clsx";
 import { useAtom } from "jotai";
-import React, { useRef } from "react";
+import React from "react";
 import { age } from "~/lib/dates";
 import { hoveredTask } from "~/lib/store";
 import type { Task } from "~/lib/types";
+import { useDoubleClick } from "~/lib/use-double-click";
+import { useTaskUpdate } from "~/lib/use-task-update";
 import { Assignee } from "./assignee";
+import { EditTaskInput } from "./edit-task-input";
 import { Status } from "./status";
 import { TaskComments } from "./task-comments";
-import { useTaskUpdate } from "~/lib/use-task-update";
-import { useDoubleClick } from "~/lib/use-double-click";
-import { EditTaskInput } from "./edit-task-input";
 import { TaskTitle } from "./task-title";
 
 interface Props {
@@ -85,9 +84,7 @@ export function TodoItem({ task }: Props) {
 								}}
 							/>
 						) : (
-							<>
-								<TaskTitle task={task} />{" "}
-							</>
+							<TaskTitle task={task} />
 						)}
 					</div>
 				</div>

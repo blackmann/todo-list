@@ -1,6 +1,6 @@
-import { useFetcher, useLoaderData } from "react-router";
 import clsx from "clsx";
 import React from "react";
+import { useFetcher, useLoaderData } from "react-router";
 import { authorTime } from "~/lib/dates";
 import type { Comment } from "~/lib/types";
 import { useCommentDelete } from "~/lib/use-comment-delete";
@@ -51,7 +51,7 @@ function TaskComment({ comment, taskId }: TaskCommentProps) {
 
 	return (
 		<li>
-			<div className="flex flex-col gap-2 p-2 ms-4 ps-7 border-s-2 border-stone-200/60 dark:border-neutral-700">
+			<div className="flex flex-col gap-2 p-2 ms-4.3 ps-7 border-s-2 border-stone-200/60 dark:border-neutral-700">
 				<div className="flex justify-between gap-4">
 					<div
 						className={clsx("flex-1 overflow-x-auto", {
