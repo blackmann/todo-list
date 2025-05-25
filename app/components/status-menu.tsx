@@ -83,7 +83,7 @@ export function StatusMenu({ task, onStatusUpdate }: StatusMenuProps) {
 					) : (
 						<button
 							type="button"
-							className="w-full text-red-500 rounded-lg flex gap-2 items-center bg-transparent py-2 px-3 hover:bg-red-100 dark:hover:bg-red-800/10"
+							className="w-full text-red-500 rounded-lg flex gap-2 items-center bg-transparent py-2 px-3 hover:bg-red-600/5"
 							onClick={() => setConfirmingDelete(true)}
 						>
 							<div className="i-solar-trash-bin-trash-linear" />
