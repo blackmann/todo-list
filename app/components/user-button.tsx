@@ -47,7 +47,7 @@ function UserMenu() {
 				{user.superUser && (
 					<li>
 						<Link className="block px-2 py-1" to="/new-user">
-							Add new user
+							Invite user
 						</Link>
 					</li>
 				)}
@@ -62,7 +62,7 @@ function UserMenu() {
 					<button
 						type="button"
 						onClick={handleLogout}
-						className="block w-full px-2 py-1 text-left flex gap-2 items-center text-red-600 bg-neutral-900"
+						className="block w-full px-2 py-1 text-left flex gap-2 items-center text-red-600 dark:bg-neutral-900 bg-stone-50"
 					>
 						<div className="i-solar-logout-2-outline" />
 						Logout

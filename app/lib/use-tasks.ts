@@ -5,6 +5,7 @@ import {
 	useMutation,
 	useQueryClient,
 } from "@tanstack/react-query";
+import { useRevalidator } from "react-router";
 import type { Task } from "./types";
 
 interface TaskProps {
@@ -15,6 +16,7 @@ interface TaskProps {
 
 export function useTasks({ assigneeId, search, status }: TaskProps = {}) {
 	const queryClient = useQueryClient();
+	const { revalidate } = useRevalidator();
 
 	const tasksQuery = useInfiniteQuery({
 		queryKey: ["tasks", { assigneeId, search, status }] as const,
@@ -29,6 +31,8 @@ export function useTasks({ assigneeId, search, status }: TaskProps = {}) {
 		mutationFn: createTask,
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ["tasks"] });
+
+			revalidate();
 		},
 	});
 
