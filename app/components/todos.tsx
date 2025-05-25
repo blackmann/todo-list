@@ -1,10 +1,16 @@
+import { useAtom } from "jotai";
+import { assigneeAtom, filterStatusAtom, searchAtom } from "~/lib/store";
 import { useTasks } from "~/lib/use-tasks";
 import { LoadingButton } from "./loading-button";
 import { TaskComposer } from "./task-composer";
 import { TodoItem } from "./todo-item";
 
 export function Todos() {
-	const { query } = useTasks();
+	const [assigneeId] = useAtom(assigneeAtom);
+	const [search] = useAtom(searchAtom);
+	const [status] = useAtom(filterStatusAtom);
+
+	const { query } = useTasks({ assigneeId, search, status });
 	const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = query;
 
 	const tasks = data?.pages.flat();

@@ -1,3 +1,4 @@
+import type { Status } from "@prisma/client";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { checkAuth } from "~/lib/check-auth";
 import { cleanUpdate } from "~/lib/clean-update";
@@ -8,6 +9,8 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 	const url = new URL(request.url);
 	const page = Number(url.searchParams.get("page")) || 0;
 	const search = url.searchParams.get("search") || "";
+	const assigneeId = url.searchParams.get("assigneeId") || undefined;
+	const status = url.searchParams.get("status") || undefined;
 
 	const tasks = await prisma.task.findMany({
 		where: {
@@ -15,28 +18,16 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 				contains: search,
 				mode: "insensitive",
 			},
+			...(assigneeId && { assigneeId: Number(assigneeId) }),
+			...(status && { status: status as Status }),
 		},
 		orderBy: {
 			createdAt: "desc",
 		},
 		include: {
-			_count: {
-				select: {
-					Comment: true,
-				},
-			},
-			assignee: {
-				select: {
-					username: true,
-					id: true,
-				},
-			},
-			author: {
-				select: {
-					username: true,
-					id: true,
-				},
-			},
+			_count: { select: { Comment: true } },
+			assignee: { select: { username: true, id: true } },
+			author: { select: { username: true, id: true } },
 		},
 		take: 100,
 		skip: page * 100,

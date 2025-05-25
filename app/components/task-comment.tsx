@@ -51,7 +51,7 @@ function TaskComment({ comment, taskId }: TaskCommentProps) {
 
 	return (
 		<li>
-			<div className="flex flex-col gap-2 p-2 ms-5 ps-7 border-s-2 border-stone-200/60 dark:border-neutral-700">
+			<div className="flex flex-col gap-2 p-2 ms-4 ps-7 border-s-2 border-stone-200/60 dark:border-neutral-700">
 				<div className="flex justify-between gap-4">
 					<div
 						className={clsx("flex-1 overflow-x-auto", {
