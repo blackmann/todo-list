@@ -54,15 +54,15 @@ function Menu({ onDelete, onEdit }: Props) {
 								<div className="i-solar-trash-bin-trash-linear" />
 								Delete?
 							</span>
-							<div className="flex gap-2 animate-fade-in duration-200">
+							<div className="flex gap-2">
 								<button
 									type="button"
-									className="i-lucide-check w-5 h-5 text-red-500"
+									className="i-lucide-check w-5 h-5 text-red-500 animate-zoom-in animate-duration-200"
 									onClick={onDelete}
 								/>
 								<button
 									type="button"
-									className="i-lucide-x w-5 h-5 text-secondary animate-delay-50"
+									className="i-lucide-x w-5 h-5 text-secondary animate-zoom-in animate-duration-250"
 									onClick={() => setConfirmingDelete(false)}
 								/>
 							</div>
