@@ -3,7 +3,6 @@ import React from "react";
 import { useLoaderData } from "react-router";
 import { assigneeAtom, searchAtom } from "~/lib/store";
 import type { loader } from "~/routes/_index";
-import { ActiveFilterBadge } from "./active-filter-badge";
 import { FilterButton } from "./filter-button";
 import { Input } from "./input";
 import { NotificationsButton } from "./notification-button";
@@ -27,12 +26,14 @@ export function Header() {
 
 	return (
 		<div className="flex justify-between items-center p-2 border-b dark:border-neutral-800">
-			<div className="flex gap-6 items-center">
+			<div className="flex gap-4 items-center">
 				<div>
 					<div className="i-solar-archive-minimalistic-bold-duotone text-rose-500 text-2xl" />
 				</div>
 
 				<div className="flex rounded-full divide-x divide-stone-300/50 dark:divide-neutral-700/50 border dark:border-neutral-700/50 overflow-hidden">
+					<FilterButton />
+
 					<div>
 						<Input
 							placeholder="Search for task"
@@ -56,12 +57,6 @@ export function Header() {
 							))}
 						</Select>
 					</div>
-				</div>
-
-				<div className="flex gap-2">
-					<FilterButton />
-
-					<ActiveFilterBadge />
 				</div>
 			</div>
 
