@@ -87,3 +87,7 @@ code:not(.shiki code):not(.shiki .line code) {
   font-family: 'DM Mono', monospace;
   @apply px-1 py-0 rounded-lg bg-stone-200 dark:bg-neutral-800;
 }
+
+a {
+  @apply text-blue-600 dark:text-blue-400 hover:underline underline-offset-2 transition-colors;
+}
