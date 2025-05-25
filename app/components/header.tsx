@@ -1,6 +1,6 @@
-import { useLoaderData } from "@remix-run/react";
 import { useAtom } from "jotai";
 import React from "react";
+import { useLoaderData } from "react-router";
 import { assigneeAtom, searchAtom } from "~/lib/store";
 import type { loader } from "~/routes/_index";
 import { ActiveFilterBadge } from "./active-filter-badge";

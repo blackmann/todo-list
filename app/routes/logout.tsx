@@ -1,6 +1,12 @@
-import type { LoaderFunctionArgs } from "@remix-run/node";
-import { logout } from "~/lib/logout-server";
+import { type LoaderFunctionArgs, redirect } from "react-router";
+import { authCookie } from "~/lib/cookies.server";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-	return await logout(request);
+	return redirect("/", {
+		headers: {
+			"Set-Cookie": await authCookie.serialize("auth", {
+				maxAge: 0,
+			}),
+		},
+	});
 };
