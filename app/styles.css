@@ -1,12 +1,13 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500;700&display=swap');
-
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&family=Geist:wght@100..900&display=swap");
 :root {
   font-size: 14px;
-  font-family: system-ui, -apple-system, sans-serif;
   color-scheme: light dark;
+  font-family: "Geist", sans-serif;
+  font-optical-sizing: auto;
 
-  @apply bg-stone-100 dark:bg-neutral-900
+  @apply bg-stone-100 dark:bg-neutral-900;
 }
 
 .text-secondary {
@@ -14,7 +15,8 @@
 }
 
 .font-mono {
-  font-family: 'DM Mono', monospace;
+  font-family: "Geist Mono", monospace;
+  font-optical-sizing: auto;
 }
 
 input::placeholder,
@@ -23,7 +25,7 @@ textarea::placeholder {
 }
 
 code {
-  font-family: 'DM Mono', monospace;
+  font-family: "DM Mono", monospace;
 }
 
 .shiki {
@@ -44,11 +46,10 @@ code {
   margin-right: 1.5rem;
   display: inline-block;
   text-align: right;
-  color: rgba(115, 138, 148, .4);
+  color: rgba(115, 138, 148, 0.4);
 }
 
 @media (prefers-color-scheme: dark) {
-
   .shiki,
   .shiki span {
     color: var(--shiki-dark) !important;
@@ -65,7 +66,7 @@ code {
   @apply rounded-xl;
 }
 
-.comment-article p+:is(p, ul, ol, pre) {
+.comment-article p + :is(p, ul, ol, pre) {
   @apply mt-2;
 }
 
@@ -83,16 +84,15 @@ code {
 
 .comment-article pre {
   @apply overflow-x-auto rounded-xl bg-neutral-100 dark:bg-neutral-800 p-3 text-sm max-w-7xl max-h-3xl;
-
 }
 
 .comment-article code {
   @apply whitespace-pre;
-  font-family: 'DM Mono', monospace;
+  font-family: "DM Mono", monospace;
 }
 
 code:not(.shiki code):not(.shiki .line code) {
-  font-family: 'DM Mono', monospace;
+  font-family: "DM Mono", monospace;
   @apply px-1 py-0 rounded-lg bg-stone-200 dark:bg-neutral-800;
 }
 
