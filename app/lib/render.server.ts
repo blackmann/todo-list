@@ -1,4 +1,5 @@
 import rehypeShiki from "@shikijs/rehype";
+import rehypeExternalLinks from "rehype-external-links";
 import rehypeKatex from "rehype-katex";
 import rehypeSanitize from "rehype-sanitize";
 import rehypeStringify from "rehype-stringify";
@@ -19,6 +20,10 @@ const processor = unified()
 	.use(linkifyMentions)
 	.use(remarkMath)
 	.use(rehypeKatex)
+	.use(rehypeExternalLinks, {
+		rel: ["nofollow", "noopener", "noreferrer"],
+		target: "_blank",
+	})
 	.use(removeCodeTrail)
 	.use(rehypeShiki, {
 		themes: { light: "snazzy-light", dark: "ayu-dark" },
