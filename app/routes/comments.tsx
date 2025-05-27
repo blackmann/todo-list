@@ -1,5 +1,5 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
-import { TAG_REGEX } from "~/lib/constants";
+import { type CreateMentionOpts, createMentions } from "~/lib/mentions.server";
 import { prisma } from "~/lib/prisma.server";
 import { render } from "~/lib/render.server";
 import { badRequest } from "~/lib/responses";
@@ -82,41 +82,14 @@ export async function action({ request }: ActionFunctionArgs) {
 		},
 	});
 
-	if (comment.content.includes("@")) {
-		const mentionedUsernames = [...comment.content.matchAll(TAG_REGEX)]
-			.map((match) => match[1])
-			.filter(Boolean);
+	const opts: CreateMentionOpts = {
+		content: comment.content,
+		taskId: comment.taskId,
+		authorId: comment.authorId,
+		authorUsername: comment.author.username,
+	};
 
-		const uniqueUsernames = [...new Set(mentionedUsernames)];
-
-		if (uniqueUsernames.length > 0) {
-			const taskId = comment.taskId;
-
-			for (const username of uniqueUsernames) {
-				if (username === comment.author.username) continue;
-
-				const user = await prisma.user.findUnique({
-					where: {
-						username,
-					},
-				});
-
-				if (!user) continue;
-
-				await prisma.notification.create({
-					data: {
-						message: `You were mentioned in a comment under @[task/${taskId}]`,
-						userId: user.id,
-						type: "mention",
-						meta: {
-							taskId: taskId,
-							mentionedBy: comment.authorId,
-						},
-					},
-				});
-			}
-		}
-	}
+	await createMentions(opts);
 
 	comment.content = await render(comment.content);
 

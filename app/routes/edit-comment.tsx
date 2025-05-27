@@ -1,5 +1,5 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
-import { TAG_REGEX } from "~/lib/constants";
+import { type EditMentionOpts, updateMentions } from "~/lib/mentions.server";
 import { prisma } from "~/lib/prisma.server";
 import { render } from "~/lib/render.server";
 import { badRequest, methodNotAllowed, notFound } from "~/lib/responses";
@@ -34,86 +34,13 @@ export async function action({ request }: ActionFunctionArgs) {
 
 	const { id, content, authorId } = await request.json();
 
-	if (content.includes("@")) {
-		const originalComment = await prisma.comment.findUnique({
-			where: { id },
-			select: { content: true },
-		});
+	const originalComment = await prisma.comment.findUnique({
+		where: { id },
+		select: { content: true },
+	});
 
-		if (!originalComment) {
-			throw notFound();
-		}
-
-		const previouslyMentionedUsernames = [
-			...originalComment.content.matchAll(TAG_REGEX),
-		]
-			.map((match) => match[1])
-			.filter(Boolean);
-
-		const uniquePreviouslyMentioned = [
-			...new Set(previouslyMentionedUsernames),
-		];
-
-		const comment = await prisma.comment.update({
-			where: {
-				id,
-				authorId,
-			},
-			data: {
-				content,
-				editedAt: new Date(),
-			},
-			include: {
-				author: {
-					select: {
-						id: true,
-						username: true,
-					},
-				},
-			},
-		});
-
-		const currentlyMentionedUsernames = [...comment.content.matchAll(TAG_REGEX)]
-			.map((match) => match[1])
-			.filter(Boolean);
-
-		const uniqueCurrentlyMentioned = [...new Set(currentlyMentionedUsernames)];
-
-		const newlyMentionedUsernames = uniqueCurrentlyMentioned.filter(
-			(username) => !uniquePreviouslyMentioned.includes(username),
-		);
-
-		if (newlyMentionedUsernames.length > 0) {
-			const taskId = comment.taskId;
-
-			for (const username of newlyMentionedUsernames) {
-				if (username === comment.author.username) continue;
-
-				const user = await prisma.user.findUnique({
-					where: {
-						username,
-					},
-				});
-
-				if (!user) continue;
-
-				await prisma.notification.create({
-					data: {
-						message: `You were mentioned in a comment under @[task/${taskId}]`,
-						userId: user.id,
-						type: "mention",
-						meta: {
-							taskId: taskId,
-							mentionedBy: comment.authorId,
-						},
-					},
-				});
-			}
-		}
-
-		comment.content = await render(comment.content);
-
-		return { comment };
+	if (!originalComment) {
+		throw notFound();
 	}
 
 	const comment = await prisma.comment.update({
@@ -134,6 +61,16 @@ export async function action({ request }: ActionFunctionArgs) {
 			},
 		},
 	});
+
+	const opts: EditMentionOpts = {
+		content: comment.content,
+		originalContent: originalComment.content,
+		taskId: comment.taskId,
+		authorId: comment.authorId,
+		authorUsername: comment.author.username,
+	};
+
+	await updateMentions(opts);
 
 	comment.content = await render(comment.content);
 
