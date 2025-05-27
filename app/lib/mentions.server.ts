@@ -24,16 +24,15 @@ export async function createMentions({
 
 	const uniqueUsernames = [...new Set(mentionedUsernames)];
 
-	if (uniqueUsernames.length === 0) {
-		return;
-	}
-
 	for (const username of uniqueUsernames) {
 		if (username === authorUsername) continue;
 
 		const user = await prisma.user.findUnique({
 			where: {
 				username,
+			},
+			select: {
+				id: true,
 			},
 		});
 
@@ -84,16 +83,15 @@ export async function updateMentions({
 		(username) => !uniquePreviouslyMentioned.includes(username),
 	);
 
-	if (newlyMentionedUsernames.length === 0) {
-		return;
-	}
-
 	for (const username of newlyMentionedUsernames) {
 		if (username === authorUsername) continue;
 
 		const user = await prisma.user.findUnique({
 			where: {
 				username,
+			},
+			select: {
+				id: true,
 			},
 		});
 
