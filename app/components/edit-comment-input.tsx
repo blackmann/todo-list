@@ -53,7 +53,7 @@ function EditCommentInput({
 				value={value}
 				onChange={(e) => onChange(e.target.value)}
 				onKeyDown={handleKeyDown}
-				className="px-2 py-1 border-b rounded-t-xl border-0 border-stone-300 dark:border-neutral-700 dark:bg-neutral-800 w-full bg-stone-200/40 focus:outline-none focus:ring-0 max-h-28rem"
+				className="px-2 py-1 border-b rounded-t-xl border-0 border-stone-300 dark:border-neutral-700 dark:bg-neutral-800 w-full bg-stone-200/40 focus:outline-none focus:ring-0 max-h-18rem"
 			/>
 
 			<button
