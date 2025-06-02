@@ -1,4 +1,3 @@
-import argon2 from "argon2";
 import clsx from "clsx";
 import { type FieldValues, useForm } from "react-hook-form";
 import {
@@ -12,12 +11,11 @@ import {
 } from "react-router";
 import { Button } from "~/components/button";
 import { Input } from "~/components/input";
+import { createAccount, login } from "~/lib/auth";
 import { checkAuth } from "~/lib/check-auth";
 import { USERNAME_REGEX } from "~/lib/constants";
-import { authCookie } from "~/lib/cookies.server";
 import { prisma } from "~/lib/prisma.server";
 import { badRequest } from "~/lib/responses";
-import { sendWebhook } from "~/lib/webhook";
 
 export async function loader({ request }: LoaderFunctionArgs) {
 	try {
@@ -61,87 +59,10 @@ export async function action({ request }: ActionFunctionArgs) {
 	const userCreated = await prisma.user.count();
 
 	if (userCreated === 0 || invite) {
-		if (invite) {
-			const valid = await prisma.inviteToken.findFirst({
-				where: {
-					token: invite,
-					used: false,
-					expiresAt: { gt: new Date() },
-				},
-			});
-
-			if (!valid) {
-				return badRequest({ detail: "Invalid or expired invite token" });
-			}
-		}
-
-		const existingUser = await prisma.user.findUnique({ where: { username } });
-		if (existingUser) {
-			return badRequest({ detail: "Username already taken" });
-		}
-
-		if (invite) {
-			await prisma.inviteToken.update({
-				where: { token: invite },
-				data: { used: true, usedAt: new Date() },
-			});
-		}
-
-		const hashedPassword = await argon2.hash(password);
-		const user = await prisma.user.create({
-			data: {
-				username,
-				password: hashedPassword,
-				superUser: userCreated === 0,
-			},
-		});
-
-		if (userCreated > 0) {
-			const allUsers = await prisma.user.findMany({
-				select: { id: true },
-			});
-
-			await prisma.notification.createMany({
-				data: allUsers
-					.filter((u) => u.id !== user.id)
-					.map((u) => ({
-						message: `New member @[user/${user.id}] has joined`,
-						userId: u.id,
-						type: "new_member",
-						meta: {
-							newUserId: user.id,
-							username,
-						},
-					})),
-			});
-
-			sendWebhook("user.joined", {
-				user,
-			});
-		}
-
-		return redirect("/", {
-			headers: {
-				"Set-Cookie": await authCookie.serialize({ userId: user.id }),
-			},
-		});
+		return createAccount(username, password, invite);
 	}
 
-	const user = await prisma.user.findUnique({ where: { username } });
-	if (!user) {
-		return badRequest({ detail: "Incorrect username or password" });
-	}
-
-	const isPasswordValid = await argon2.verify(user.password, password);
-	if (!isPasswordValid) {
-		return badRequest({ detail: "Incorrect username or password" });
-	}
-
-	return redirect("/", {
-		headers: {
-			"Set-Cookie": await authCookie.serialize({ userId: user.id }),
-		},
-	});
+	return login(username, password);
 }
 
 export const meta: MetaFunction = () => {
