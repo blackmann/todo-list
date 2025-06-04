@@ -27,6 +27,7 @@
     "@shikijs/rehype": "^3.4.2",
     "@tanstack/react-query": "^5.76.1",
     "@unocss/reset": "66.1.0-beta.12",
+    "@vercel/react-router": "^1.1.2",
     "argon2": "^0.43.0",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
@@ -62,6 +63,6 @@
     "vite-tsconfig-paths": "^5.1.4"
   },
   "engines": {
-    "node": ">=18.0.0"
+    "node": "22"
   }
 }
