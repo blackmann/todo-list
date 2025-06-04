@@ -82,17 +82,14 @@ export async function createAccount(
 	}
 
 	if (userCreated === 0) {
-		const seed = await prisma.project.findMany();
+		const projects = await prisma.project.findMany();
 
-		if (seed.length > 0) {
-			await Promise.all(
-				seed.map((project) =>
-					prisma.projectAccess.create({
-						data: { userId: user.id, projectId: project.id },
-					}),
-				),
-			);
-		}
+		prisma.projectAccess.createMany({
+			data: projects.map((project) => ({
+				userId: user.id,
+				projectId: project.id,
+			})),
+		});
 	}
 
 	return redirect("/", {
