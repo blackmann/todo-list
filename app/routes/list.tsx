@@ -94,6 +94,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 			sendWebhook("task.deleted", {
 				task: taskToDelete,
 				user,
+				projectId: taskToDelete.projectId,
 			});
 		}
 
@@ -137,6 +138,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 				task,
 				user,
 				previousStatus,
+				projectId: task.projectId,
 			});
 		}
 
@@ -161,6 +163,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 			sendWebhook("task.assigned", {
 				task,
 				user,
+				projectId: task.projectId,
 			});
 		}
 
@@ -169,6 +172,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 				task,
 				user,
 				updatedFields: ["title"],
+				projectId: task.projectId,
 			});
 		}
 
@@ -199,6 +203,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 		sendWebhook("task.created", {
 			task,
 			user: taskAuthor || undefined,
+			projectId: task.projectId,
 		});
 
 		return { task };

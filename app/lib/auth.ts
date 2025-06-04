@@ -41,12 +41,6 @@ export async function createAccount(
 		},
 	});
 
-	if (userCreated > 0) {
-		sendWebhook("user.joined", {
-			user,
-		});
-	}
-
 	if (invite) {
 		const allUsers = await prisma.user.findMany({
 			select: { id: true },
@@ -150,6 +144,13 @@ export async function admit(
 		where: { token },
 		data: { used: true, usedAt: new Date() },
 	});
+
+	if (!alreadyIn) {
+		sendWebhook("user.joined", {
+			user,
+			projectId: inviteToken.projectId,
+		});
+	}
 
 	if (alreadyIn) {
 		return redirect(`/${alreadyIn.project.slug}`);

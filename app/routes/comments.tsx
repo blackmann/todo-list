@@ -107,6 +107,7 @@ export async function action({ request }: ActionFunctionArgs) {
 			task,
 			user: comment.author,
 			comment: comment.content,
+			projectId: task.projectId,
 		});
 	}
 

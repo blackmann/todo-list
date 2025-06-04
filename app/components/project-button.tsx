@@ -105,24 +105,29 @@ function Content() {
 									{project.name}
 								</Link>
 
-								<button
-									type="button"
-									className="i-solar-pen-2-line-duotone text-xl text-secondary opacity-0 group-hover:opacity-100 focus:opacity-100"
-									onClick={() => {
-										edit.current = project;
-										setView("edit-project-form");
-									}}
-								/>
-								<button
-									type="button"
-									className="i-solar-trash-bin-trash-linear text-xl text-secondary opacity-0 group-hover:opacity-100"
-									disabled={isOnly}
-									hidden={isOnly}
-									onClick={() => {
-										edit.current = project;
-										setView("delete-project-form");
-									}}
-								/>
+								{user.superUser && (
+									<div className="flex items-center gap-2">
+										<button
+											type="button"
+											className="i-solar-pen-2-line-duotone text-xl text-secondary opacity-0 group-hover:opacity-100 focus:opacity-100"
+											onClick={() => {
+												edit.current = project;
+												setView("edit-project-form");
+											}}
+										/>
+
+										<button
+											type="button"
+											className="i-solar-trash-bin-trash-linear text-xl text-secondary opacity-0 group-hover:opacity-100"
+											disabled={isOnly}
+											hidden={isOnly}
+											onClick={() => {
+												edit.current = project;
+												setView("delete-project-form");
+											}}
+										/>
+									</div>
+								)}
 
 								<div className="text-sm font-mono bg-stone-300/50 dark:bg-neutral-800 px-1 leading-tight rounded-full">
 									{project._count.Task}

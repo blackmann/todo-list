@@ -15,38 +15,45 @@ export type WebhookPayload = {
 	"task.created": {
 		task: Task & { assignee?: SafeUser };
 		user?: SafeUser;
+		projectId: number;
 	};
 
 	"task.updated": {
 		task: Task & { assignee?: SafeUser };
 		user?: SafeUser;
 		updatedFields: string[];
+		projectId: number;
 	};
 
 	"task.deleted": {
 		task: Task & { assignee?: SafeUser };
 		user?: SafeUser;
+		projectId: number;
 	};
 
 	"task.status_changed": {
 		task: Task & { assignee?: SafeUser };
 		user?: SafeUser;
 		previousStatus: Status;
+		projectId: number;
 	};
 
 	"task.assigned": {
 		task: Task & { assignee?: SafeUser };
 		user?: SafeUser;
+		projectId: number;
 	};
 
 	"comment.created": {
 		task: Task & { assignee?: SafeUser };
 		user?: SafeUser;
 		comment: string;
+		projectId: number;
 	};
 
 	"user.joined": {
 		user: SafeUser;
+		projectId: number;
 	};
 };
 
