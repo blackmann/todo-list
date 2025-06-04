@@ -15,9 +15,13 @@ export function TaskTitle({ task }: Props) {
 		<div className="font-medium flex items-center gap-2">
 			{priority && (
 				<span
-					className={clsx("rounded p-0.5 text-xs font-semibold", priority.color, {
-						"bg-stone-400 dark:bg-neutral-700": task.status === "done",
-					})}
+					className={clsx(
+						"rounded p-0.5 text-xs font-semibold",
+						priority.color,
+						{
+							"bg-stone-400 dark:bg-neutral-700": task.status === "done",
+						},
+					)}
 				>
 					{priority.label}
 				</span>

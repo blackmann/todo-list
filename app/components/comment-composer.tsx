@@ -78,7 +78,8 @@ export function CommentComposer({ taskId }: Props) {
 
 			<div className="text-sm text-secondary flex justify-between gap-4">
 				<div className="flex items-center gap-2">
-					<div className="i-solar-link-round-angle-bold-duotone" /> Drop files here
+					<div className="i-solar-link-round-angle-bold-duotone" /> Drop files
+					here
 				</div>
 
 				<button

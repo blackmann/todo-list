@@ -11,9 +11,7 @@ function CopyButton({
 	className?: string;
 	disabled?: boolean;
 }) {
-	const [copyStatus, setCopyStatus] = React.useState<"failed" | "copied" | null>(
-		null,
-	);
+	const [copyStatus, setCopyStatus] = React.useState<"failed" | "copied">();
 
 	const handleCopy = async () => {
 		try {
@@ -24,7 +22,7 @@ function CopyButton({
 		}
 
 		setTimeout(() => {
-			setCopyStatus(null);
+			setCopyStatus(undefined);
 		}, 1000);
 	};
 
