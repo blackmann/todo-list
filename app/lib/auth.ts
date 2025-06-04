@@ -81,6 +81,20 @@ export async function createAccount(
 		return res;
 	}
 
+	if (userCreated === 0) {
+		const seed = await prisma.project.findMany();
+
+		if (seed.length > 0) {
+			await Promise.all(
+				seed.map((project) =>
+					prisma.projectAccess.create({
+						data: { userId: user.id, projectId: project.id },
+					}),
+				),
+			);
+		}
+	}
+
 	return redirect("/", {
 		headers: {
 			"Set-Cookie": await authCookie.serialize({ userId: user.id }),
@@ -127,14 +141,26 @@ export async function admit(
 		throw badRequest({ detail: "Invalid or expired invite token" });
 	}
 
-	const access = await prisma.projectAccess.create({
-		data: { userId: user.id, projectId: inviteToken.projectId },
+	const alreadyIn = await prisma.projectAccess.findFirst({
+		where: {
+			userId: user.id,
+			projectId: inviteToken.projectId,
+		},
 		include: { project: true },
 	});
 
 	await prisma.inviteToken.update({
 		where: { token },
 		data: { used: true, usedAt: new Date() },
+	});
+
+	if (alreadyIn) {
+		return redirect(`/${alreadyIn.project.slug}`);
+	}
+
+	const access = await prisma.projectAccess.create({
+		data: { userId: user.id, projectId: inviteToken.projectId },
+		include: { project: true },
 	});
 
 	return redirect(`/${access.project.slug}`, {
