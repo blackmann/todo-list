@@ -56,7 +56,7 @@ async function createWebhookPayload(
 ): Promise<DiscordWebhookPayload> {
 	const baseUrl =
 		process.env.BASE_URL ||
-		(process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "");
+		(process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : "");
 	const botName = process.env.DISCORD_BOT_NAME || "kovacs";
 
 	const payload: DiscordWebhookPayload = {
