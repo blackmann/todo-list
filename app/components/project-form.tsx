@@ -11,9 +11,10 @@ import { usePopoverContext } from "./popover";
 interface Props {
 	onClose: () => void;
 	project?: Project;
+	editMode?: boolean;
 }
 
-export function ProjectForm({ onClose, project }: Props) {
+export function ProjectForm({ onClose, project, editMode }: Props) {
 	const { create, update } = useProjects();
 
 	const { register, handleSubmit, watch } = useForm({
@@ -75,7 +76,9 @@ export function ProjectForm({ onClose, project }: Props) {
 		<form className="text-sm" onSubmit={handleSubmit(onSubmit)}>
 			<div className="p-3 space-y-3">
 				<div className="flex justify-between gap-2 items-center">
-					<div className="font-medium text-base">Create new project</div>
+					<div className="font-medium text-base">
+						{editMode ? `Edit ${project?.name}` : "Create new project"}
+					</div>
 					<button
 						type="button"
 						className="bg-transparent cursor-pointer text-secondary"

@@ -64,7 +64,7 @@ function Content() {
 	if (view === "edit-project-form") {
 		return (
 			<Container className="!w-17rem">
-				<ProjectForm onClose={() => setView("list")} project={edit.current} />
+				<ProjectForm onClose={() => setView("list")} project={edit.current} editMode/>
 			</Container>
 		);
 	}

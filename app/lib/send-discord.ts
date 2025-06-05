@@ -56,7 +56,9 @@ async function createWebhookPayload(
 ): Promise<DiscordWebhookPayload> {
 	const baseUrl =
 		process.env.BASE_URL ||
-		(process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : "");
+		(process.env.VERCEL_PROJECT_PRODUCTION_URL
+			? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+			: "");
 	const botName = process.env.DISCORD_BOT_NAME || "kovacs";
 
 	const payload: DiscordWebhookPayload = {
@@ -69,20 +71,25 @@ async function createWebhookPayload(
 		timestamp: new Date().toISOString(),
 	};
 
-	if (event.projectId) {
-		const project = await prisma.project.findUnique({
-			where: {
-				id: event.projectId,
-			},
-			select: {
-				name: true,
-			},
-		});
+	const project = await prisma.project.findUnique({
+		where: {
+			id: event.projectId,
+		},
+		select: {
+			name: true,
+			slug: true,
+		},
+	});
 
+	if (project) {
 		embed.footer = {
 			text: `📌 ${project?.name}`,
 		};
 	}
+
+	const slug = project?.slug;
+
+	const projectUrl = slug && baseUrl ? `${baseUrl}/${slug}` : baseUrl;
 
 	switch (event.type) {
 		case "task.created": {
@@ -92,8 +99,8 @@ async function createWebhookPayload(
 			embed.title = "📣 New Task Created";
 			embed.description = `${task.title} \`#${task.id}\``;
 
-			if (baseUrl) {
-				embed.url = baseUrl;
+			if (projectUrl) {
+				embed.url = projectUrl;
 			}
 
 			embed.fields = [
@@ -122,13 +129,14 @@ async function createWebhookPayload(
 		}
 
 		case "task.updated": {
-			const { task, user, updatedFields } = event as WebhookEvent<"task.updated">;
+			const { task, user, updatedFields } =
+				event as WebhookEvent<"task.updated">;
 			if (!task || !updatedFields) break;
 
 			embed.title = "✏️ Task Updated";
 			embed.description = `Title update for \`#${task.id}\``;
-			if (baseUrl) {
-				embed.url = baseUrl;
+			if (projectUrl) {
+				embed.url = projectUrl;
 			}
 
 			embed.fields = updatedFields.map((field) => ({
@@ -157,8 +165,8 @@ async function createWebhookPayload(
 					? `~~${task.title}~~ \`#${task.id}\``
 					: `${task.title} \`#${task.id}\``;
 
-			if (baseUrl) {
-				embed.url = baseUrl;
+			if (projectUrl) {
+				embed.url = projectUrl;
 			}
 
 			embed.fields = [
@@ -189,8 +197,8 @@ async function createWebhookPayload(
 
 			embed.title = "🖇️ Task Assigned";
 			embed.description = `${task.title} \`#${task.id}\``;
-			if (baseUrl) {
-				embed.url = baseUrl;
+			if (projectUrl) {
+				embed.url = projectUrl;
 			}
 
 			if (task.assignee) {
@@ -234,15 +242,17 @@ async function createWebhookPayload(
 
 			embed.title = "💬 New Comment";
 			embed.description = `On task: ${task.title} \`#${task.id}\``;
-			if (baseUrl) {
-				embed.url = baseUrl;
+			if (projectUrl) {
+				embed.url = projectUrl;
 			}
 
 			embed.fields = [
 				{
 					name: "Comment",
 					value:
-						comment.length > 1018 ? `${comment.substring(0, 1015)}...` : `${comment}`,
+						comment.length > 1018
+							? `${comment.substring(0, 1015)}...`
+							: `${comment}`,
 				},
 			];
 
