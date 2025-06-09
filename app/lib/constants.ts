@@ -4,3 +4,7 @@ export const TAG_REGEX = /@(\w+)/g;
 export const TASK_ID_REGEX = /^#(\d+)$/;
 export const USERNAME_REGEX = /^[a-z\d](?:[a-z\d]|-(?=[a-z\d])){2,13}$/i;
 export const SLUG_REGEX = USERNAME_REGEX;
+export const TASK_LIST_ITEM_REGEX = /^\s*[-*]\s+\[( |x)\]/;
+export const TASK_LIST_CHECKED_REGEX = /^\s*[-*]\s+\[x\]/i;
+export const TASK_LIST_REPLACE_REGEX = /^\s*([-*])\s+\[( |x)\]/i;
+export const TASK_LIST_LABEL_REGEX = /^\s*[-*]\s+\[( |x)\]\s?/i;

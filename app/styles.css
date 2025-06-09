@@ -97,3 +97,11 @@ code:not(.shiki code):not(.shiki .line code) {
 	font-family: "DM Mono", monospace;
 	@apply px-1 py-0 rounded-lg bg-stone-200 dark:bg-neutral-800;
 }
+
+.comment-article li:has(input[type="checkbox"]) {
+	list-style: none;
+}
+
+.comment-article li > input[type="checkbox"] {
+	display: none;
+}

@@ -17,7 +17,7 @@ interface TaskCommentProps {
 
 function TaskComment({ comment, taskId }: TaskCommentProps) {
 	const [isEditing, setIsEditing] = React.useState(false);
-	const [draft, setDraft] = React.useState("");
+	const [rawContent, setRawContent] = React.useState("");
 
 	const fetcher = useFetcher<{ content: string }>();
 	const { user } = useLoaderData<typeof loader>();
@@ -26,27 +26,39 @@ function TaskComment({ comment, taskId }: TaskCommentProps) {
 	const remove = useCommentDelete(taskId);
 
 	React.useEffect(() => {
-		if (isEditing) {
+		if ((isEditing || !rawContent) && !fetcher.data) {
 			fetcher.load(`/edit-comment?id=${comment.id}`);
 		}
-	}, [isEditing, comment.id, fetcher.load]);
+	}, [isEditing, comment.id, fetcher.load, rawContent, fetcher.data]);
 
 	React.useEffect(() => {
-		if (fetcher.data?.content && isEditing) {
-			setDraft(fetcher.data.content);
+		if (fetcher.data?.content) {
+			setRawContent(fetcher.data.content);
 		}
-	}, [fetcher.data, isEditing]);
+	}, [fetcher.data]);
 
 	function handleEdit() {
-		if (!draft.trim()) return;
+		if (!rawContent.trim()) return;
+
+		const updatedContent = rawContent.trim();
 
 		edit.mutate({
 			id: comment.id,
-			content: draft.trim(),
+			content: updatedContent,
 			authorId: user.id,
 		});
 
 		setIsEditing(false);
+	}
+
+	function handleInlineToggle(updatedContent: string) {
+		setRawContent(updatedContent);
+
+		edit.mutate({
+			id: comment.id,
+			content: updatedContent,
+			authorId: user.id,
+		});
 	}
 
 	return (
@@ -69,18 +81,19 @@ function TaskComment({ comment, taskId }: TaskCommentProps) {
 							<p className="text-neutral-500 dark:text-neutral-400 italic text-sm">
 								This message was deleted
 							</p>
-						) : isEditing && fetcher.data ? (
+						) : isEditing ? (
 							<EditCommentInput
-								value={draft}
-								onChange={setDraft}
+								value={rawContent}
+								onChange={setRawContent}
 								onConfirm={handleEdit}
-								onCancel={() => {
-									setIsEditing(false);
-									setDraft("");
-								}}
+								onCancel={() => setIsEditing(false)}
 							/>
 						) : (
-							<Content content={comment.content} />
+							<Content
+								content={comment.content}
+								rawContent={rawContent}
+								updateComment={handleInlineToggle}
+							/>
 						)}
 					</div>
 
