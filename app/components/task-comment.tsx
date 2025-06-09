@@ -5,7 +5,7 @@ import { authorTime } from "~/lib/dates";
 import type { Comment } from "~/lib/types";
 import { useCommentDelete } from "~/lib/use-comment-delete";
 import { useCommentEdit } from "~/lib/use-comments-edit";
-import type { loader } from "~/routes/_index";
+import type { loader } from "~/routes/$project";
 import { CommentMenu } from "./comment-menu";
 import { Content } from "./content";
 import { EditCommentInput } from "./edit-comment-input";
