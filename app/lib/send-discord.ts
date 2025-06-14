@@ -220,6 +220,78 @@ async function createWebhookPayload(
 			break;
 		}
 
+		case "task.pr_opened": {
+			const { task, prUrl, prNumber, branchName } =
+				event as WebhookEvent<"task.pr_opened">;
+
+			embed.title = "🔀 Pull Request Opened";
+			embed.description = `${task.title} \`#${task.id}\``;
+			embed.url = prUrl;
+
+			embed.fields = [
+				{
+					name: "Status",
+					value: "`In Review`",
+					inline: true,
+				},
+				{
+					name: "Branch",
+					value: `\`${branchName}\``,
+					inline: true,
+				},
+				{
+					name: "Pull Request",
+					value: `[PR #${prNumber}](${prUrl})`,
+					inline: false,
+				},
+			];
+
+			if (task.assignee) {
+				embed.fields.push({
+					name: "Assignee",
+					value: `\`@${task.assignee.username}\``,
+					inline: true,
+				});
+			}
+			break;
+		}
+
+		case "task.pr_merged": {
+			const { task, prUrl, prNumber, branchName } =
+				event as WebhookEvent<"task.pr_merged">;
+
+			embed.title = "✅ Pull Request Merged";
+			embed.description = `~~${task.title}~~ \`#${task.id}\``;
+			embed.url = prUrl;
+
+			embed.fields = [
+				{
+					name: "Status",
+					value: "`Done`",
+					inline: true,
+				},
+				{
+					name: "Branch",
+					value: `\`${branchName}\``,
+					inline: true,
+				},
+				{
+					name: "Pull Request",
+					value: `[PR #${prNumber}](${prUrl})`,
+					inline: false,
+				},
+			];
+
+			if (task.assignee) {
+				embed.fields.push({
+					name: "Assignee",
+					value: `\`@${task.assignee.username}\``,
+					inline: true,
+				});
+			}
+			break;
+		}
+
 		case "task.deleted": {
 			const { task, user } = event as WebhookEvent<"task.deleted">;
 			if (!task) break;
@@ -294,6 +366,10 @@ function getColorForEvent(eventType: EventType): number {
 			return 0x818cf8;
 		case "task.assigned":
 			return 0xa78bfa;
+		case "task.pr_opened":
+			return 0x6366f1;
+		case "task.pr_merged":
+			return 0x10b981;
 		case "task.deleted":
 			return 0xf87171;
 		case "comment.created":

@@ -8,6 +8,8 @@ export type EventType =
 	| "task.deleted"
 	| "task.status_changed"
 	| "task.assigned"
+	| "task.pr_opened"
+	| "task.pr_merged"
 	| "comment.created"
 	| "user.joined";
 
@@ -53,6 +55,22 @@ export type WebhookPayload = {
 
 	"user.joined": {
 		user: SafeUser;
+		projectId: number;
+	};
+
+	"task.pr_opened": {
+		task: Task & { assignee?: SafeUser };
+		prUrl: string;
+		prNumber: number;
+		branchName: string;
+		projectId: number;
+	};
+
+	"task.pr_merged": {
+		task: Task & { assignee?: SafeUser };
+		prUrl: string;
+		prNumber: number;
+		branchName: string;
 		projectId: number;
 	};
 };

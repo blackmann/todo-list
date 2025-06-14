@@ -37,24 +37,27 @@ model ProjectAccess {
 }
 
 model Task {
-  id          Int       @id @default(autoincrement())
-  title       String
-  status      Status    @default(pending)
-  author      User      @relation("author", fields: [authorId], references: [id])
-  assignee    User      @relation("assignee", fields: [assigneeId], references: [id])
-  project     Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  projectId   Int
-  completedAt DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  Comment     Comment[]
-  authorId    Int
-  assigneeId  Int
+  id             Int       @id @default(autoincrement())
+  title          String
+  status         Status    @default(pending)
+  author         User      @relation("author", fields: [authorId], references: [id])
+  assignee       User      @relation("assignee", fields: [assigneeId], references: [id])
+  project        Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId      Int
+  completedAt    DateTime?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  Comment        Comment[]
+  authorId       Int
+  assigneeId     Int
+  githubPrUrl    String?
+  githubPrNumber Int?
 }
 
 enum Status {
   pending
   inProgress
+  inReview
   done
 }
 
@@ -84,6 +87,7 @@ model User {
   Assignments   Task[]          @relation("assignee")
   Notification  Notification[]
   ProjectAccess ProjectAccess[]
+  Installation  Installation?
 }
 
 model Notification {
@@ -117,4 +121,13 @@ model InviteToken {
   project   Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
   usedAt    DateTime?
   expiresAt DateTime
+}
+
+model Installation {
+  id                   Int     @id @default(autoincrement())
+  githubInstallationId Int     @unique
+  userId               Int     @unique
+  user                 User    @relation(fields: [userId], references: [id])
+  active               Boolean @default(true)
+  createdAt DateTime @default(now())
 }
