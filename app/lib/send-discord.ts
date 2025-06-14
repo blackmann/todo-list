@@ -83,7 +83,7 @@ async function createWebhookPayload(
 
 	if (project) {
 		embed.footer = {
-			text: `📌 ${project?.name}`,
+			text: `📦 ${project?.name}`,
 		};
 	}
 
@@ -178,6 +178,34 @@ async function createWebhookPayload(
 				{
 					name: "To",
 					value: `\`${task.status}\``,
+					inline: true,
+				},
+			];
+
+			if (user) {
+				embed.author = {
+					name: `@${user.username}`,
+					icon_url: `https://api.dicebear.com/9.x/dylan/png?seed=${encodeURIComponent(user.username)}`,
+				};
+			}
+			break;
+		}
+
+		case "task.pinned": {
+			const { task, user, pinned } = event as WebhookEvent<"task.pinned">;
+			if (!task) break;
+
+			embed.title = pinned ? "📌 Task Pinned" : "📌 Task Unpinned";
+			embed.description = `${task.title} \`#${task.id}\``;
+
+			if (projectUrl) {
+				embed.url = projectUrl;
+			}
+
+			embed.fields = [
+				{
+					name: "Status",
+					value: pinned ? "`Pinned`" : "`Unpinned`",
 					inline: true,
 				},
 			];
@@ -294,6 +322,8 @@ function getColorForEvent(eventType: EventType): number {
 			return 0x818cf8;
 		case "task.assigned":
 			return 0xa78bfa;
+		case "task.pinned":
+			return 0xf59e0b;
 		case "task.deleted":
 			return 0xf87171;
 		case "comment.created":

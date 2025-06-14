@@ -89,6 +89,9 @@ export function TodoItem({ task }: Props) {
 					</div>
 				</div>
 
+				{task.pinned && (
+					<div className="i-solar-pin-circle-broken text-lg text-secondary" />
+				)}
 				<div className="flex gap-3 items-center">
 					<Assignee task={task} />
 

@@ -8,6 +8,7 @@ export type EventType =
 	| "task.deleted"
 	| "task.status_changed"
 	| "task.assigned"
+	| "task.pinned"
 	| "comment.created"
 	| "user.joined";
 
@@ -41,6 +42,13 @@ export type WebhookPayload = {
 	"task.assigned": {
 		task: Task & { assignee?: SafeUser };
 		user?: SafeUser;
+		projectId: number;
+	};
+
+	"task.pinned": {
+		task: Task & { assignee?: SafeUser };
+		user?: SafeUser;
+		pinned: boolean;
 		projectId: number;
 	};
 
