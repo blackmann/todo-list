@@ -59,17 +59,33 @@ enum Status {
 }
 
 model Comment {
-  id        Int      @id @default(autoincrement())
-  content   String
-  taskId    Int
-  task      Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
-  authorId  Int
-  author    User     @relation(fields: [authorId], references: [id])
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id         Int      @id @default(autoincrement())
+  content    String
+  rawContent String
+  taskId     Int
+  task       Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  authorId   Int
+  author     User     @relation(fields: [authorId], references: [id])
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 
   editedAt  DateTime?
   deletedAt DateTime?
+
+  Media Media[]
+}
+
+model Media {
+  id          Int      @id @default(autoincrement())
+  url         String
+  thumbnail   String?
+  filename    String
+  contentType String
+  size        Int
+  duration    Int?
+  commentId   Int
+  comment     Comment  @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
 }
 
 model User {

@@ -1,10 +1,10 @@
+import type { Prisma } from "@prisma/client";
 import clsx from "clsx";
 import React from "react";
-import { useFetcher, useLoaderData } from "react-router";
+import { useLoaderData } from "react-router";
 import { authorTime } from "~/lib/dates";
-import type { Comment } from "~/lib/types";
 import { useCommentDelete } from "~/lib/use-comment-delete";
-import { useCommentEdit } from "~/lib/use-comments-edit";
+import { useCommentEdit, useRemoveMedia } from "~/lib/use-comments-edit";
 import type { loader } from "~/routes/$project";
 import { CommentMenu } from "./comment-menu";
 import { Content } from "./content";
@@ -12,34 +12,29 @@ import { EditCommentInput } from "./edit-comment-input";
 
 interface TaskCommentProps {
 	taskId: number;
-	comment: Comment;
+	comment: Prisma.CommentGetPayload<{
+		include: {
+			Media: true;
+			author: {
+				select: {
+					username: true;
+				};
+			};
+		};
+	}>;
 }
 
 function TaskComment({ comment, taskId }: TaskCommentProps) {
 	const [isEditing, setIsEditing] = React.useState(false);
-	const [rawContent, setRawContent] = React.useState("");
+	const [rawContent, setRawContent] = React.useState(comment.rawContent);
 
-	const fetcher = useFetcher<{ content: string }>();
 	const { user } = useLoaderData<typeof loader>();
 
 	const edit = useCommentEdit(taskId);
 	const remove = useCommentDelete(taskId);
-
-	React.useEffect(() => {
-		if (isEditing && !rawContent && !fetcher.data) {
-			fetcher.load(`/edit-comment?id=${comment.id}`);
-		}
-	}, [isEditing, comment.id, fetcher.load, rawContent, fetcher.data]);
-
-	React.useEffect(() => {
-		if (fetcher.data?.content) {
-			setRawContent(fetcher.data.content);
-		}
-	}, [fetcher.data]);
+	const removeMedia = useRemoveMedia(taskId);
 
 	function handleEdit() {
-		if (!rawContent.trim()) return;
-
 		const updatedContent = rawContent.trim();
 		setRawContent(updatedContent);
 
@@ -84,14 +79,19 @@ function TaskComment({ comment, taskId }: TaskCommentProps) {
 							</p>
 						) : isEditing ? (
 							<EditCommentInput
+								media={comment.Media}
 								value={rawContent}
 								onChange={setRawContent}
 								onConfirm={handleEdit}
-								onCancel={() => setIsEditing(false)}
+								onCancel={() => {
+									setIsEditing(false);
+									setRawContent(comment.rawContent);
+								}}
+								onRemoveMedia={(ids) => removeMedia.mutate(ids)}
 							/>
 						) : (
 							<Content
-								content={comment.content}
+								comment={comment}
 								rawContent={rawContent}
 								updateComment={handleInlineToggle}
 							/>

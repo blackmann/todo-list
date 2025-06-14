@@ -6,10 +6,12 @@ function CopyButton({
 	text,
 	className,
 	disabled,
+	isPreview,
 }: {
 	text: string;
 	className?: string;
 	disabled?: boolean;
+	isPreview?: boolean;
 }) {
 	const [copyStatus, setCopyStatus] = React.useState<"failed" | "copied">();
 
@@ -30,14 +32,16 @@ function CopyButton({
 		<Button
 			onClick={handleCopy}
 			className={clsx(
-				"w-full text-sm font-medium flex items-center justify-center bg-neutral-700 text-white dark:bg-white dark:text-neutral-900 px-3 !py-1 gap-1",
+				"text-sm font-medium ",
 				className,
+				isPreview && "!text-black !dark:text-white",
 			)}
 			disabled={disabled}
 		>
-			{copyStatus === "copied" ? "Copied" : "Copy"}{" "}
+			{copyStatus === "copied" ? "Copied" : `Copy ${isPreview ? "link" : ""}`}{" "}
 			<div
 				className={clsx(
+					isPreview && "text-secondary",
 					copyStatus === "copied"
 						? "i-solar-copy-bold-duotone animate-zoom-in animate-duration-200"
 						: "i-solar-copy-linear",

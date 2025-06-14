@@ -50,6 +50,7 @@ export async function action({ request }: ActionFunctionArgs) {
 		},
 		data: {
 			content,
+			rawContent: content,
 			editedAt: new Date(),
 		},
 		include: {

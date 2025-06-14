@@ -25,6 +25,14 @@ BASE_URL= # falls back to VERCEL_PROJECT_PRODUCTION_URL which is set on Vercel e
 WEBHOOK_URL= # optional
 DISCORD_WEBHOOK_URL= # optional, see Webhook section
 DISCORD_BOT_NAME= # optional, defaults to "kovacs"
+
+# File Upload Configuration (optional)
+VITE_ENABLE_FILE_UPLOAD=true
+AWS_ENDPOINT=https://s3.<your_region>.amazonaws.com/
+AWS_REGION=your_region
+AWS_ACCESS_KEY=your_aws_access_key
+AWS_SECRET_KEY=your_aws_secret_key
+AWS_BUCKET_NAME=your_bucket_name
 ```
 
 ## Webhook Integration
