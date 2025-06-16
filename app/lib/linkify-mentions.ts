@@ -44,7 +44,7 @@ function replaceMention(value: string, username: string) {
 	];
 }
 
-export default function linkifyMentions(): ReturnType<Plugin> {
+export const linkifyMentions: Plugin = () => {
 	return (tree) => {
 		findAndReplace(tree, [[mentionRegex, replaceMention]]);
 	};

@@ -49,7 +49,7 @@ export function StatusMenu({ task, onStatusUpdate }: StatusMenuProps) {
 						>
 							<span>{s.label}</span>
 							{s.id === task.status && (
-								<div className="i-lucide-check text-secondary" />
+								<div className="i-lucide-check text-lg text-secondary" />
 							)}
 						</button>
 					</li>
@@ -61,7 +61,7 @@ export function StatusMenu({ task, onStatusUpdate }: StatusMenuProps) {
 			<ul className="space-y-1 p-1">
 				<li className="font-mono">
 					{confirmingDelete ? (
-						<div className="flex justify-between items-center px-3 py-2 text-red-500 rounded-lg bg-red-100 dark:bg-red-800/10">
+						<div className="flex justify-between items-center px-3 py-2 text-red-500 rounded-lg bg-red-100/50 dark:bg-red-800/10">
 							<span className="flex items-center gap-2">
 								<div className="i-solar-trash-bin-trash-linear " />
 								Delete?
@@ -69,12 +69,12 @@ export function StatusMenu({ task, onStatusUpdate }: StatusMenuProps) {
 							<div className="flex gap-2">
 								<button
 									type="button"
-									className="i-lucide-check w-5 h-5 text-red-500 animate-fade-in"
+									className="i-lucide-check w-5 h-5 text-red-500 animate-fade-in animate-duration-150"
 									onClick={() => remove.mutate()}
 								/>
 								<button
 									type="button"
-									className="i-lucide-x w-5 h-5 text-secondary animate-fade-in"
+									className="i-lucide-x w-5 h-5 text-secondary opacity-0 animate-fade-in animate-duration-200 animate-delay-50 animate-forwards"
 									onClick={() => setConfirmingDelete(false)}
 								/>
 							</div>

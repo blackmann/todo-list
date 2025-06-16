@@ -1,6 +1,7 @@
 import clsx from "clsx";
 import React from "react";
 import { useFetcher, useLoaderData } from "react-router";
+import { TASK_LIST_REPLACE_REGEX } from "~/lib/constants";
 import { authorTime } from "~/lib/dates";
 import type { Comment } from "~/lib/types";
 import { useCommentDelete } from "~/lib/use-comment-delete";
@@ -52,15 +53,38 @@ function TaskComment({ comment, taskId }: TaskCommentProps) {
 		setIsEditing(false);
 	}
 
-	function handleInlineToggle(updatedContent: string) {
-		setRawContent(updatedContent);
+	const handleInlineToggle = React.useCallback(
+		async (line: number, checked: boolean) => {
+			const res = await fetch(`/edit-comment?id=${comment.id}`);
+			if (!res.ok) {
+				console.error("Failed to fetch comment for inline toggle");
+				return;
+			}
 
-		edit.mutate({
-			id: comment.id,
-			content: updatedContent,
-			authorId: user.id,
-		});
-	}
+			const data = await res.json();
+
+			const updatedContent = (data.content as string)
+				.split("\n")
+				.map((item, index) => {
+					if (index === line - 1) {
+						return item.replace(
+							TASK_LIST_REPLACE_REGEX,
+							`- [${checked ? "x" : " "}] `,
+						);
+					}
+
+					return item;
+				})
+				.join("\n");
+
+			edit.mutate({
+				id: comment.id,
+				content: updatedContent,
+				authorId: user.id,
+			});
+		},
+		[edit.mutate, comment.id, user.id],
+	);
 
 	return (
 		<li>
@@ -93,7 +117,7 @@ function TaskComment({ comment, taskId }: TaskCommentProps) {
 							<Content
 								content={comment.content}
 								rawContent={rawContent}
-								updateComment={handleInlineToggle}
+								onCheckListItem={handleInlineToggle}
 							/>
 						)}
 					</div>

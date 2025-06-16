@@ -9,7 +9,8 @@ import remarkParse from "remark-parse";
 import remarkRehype from "remark-rehype";
 import smartypants from "remark-smartypants";
 import { unified } from "unified";
-import linkifyMentions from "./linkify-mentions";
+import { linkifyMentions } from "./linkify-mentions";
+import { rehypeCheckbox } from "./rehype-checkbox";
 import { removeCodeTrail } from "./remove-code-trail";
 
 const processor = unified()
@@ -17,6 +18,7 @@ const processor = unified()
 	.use(remarkGfm)
 	.use(remarkRehype)
 	.use(rehypeSanitize)
+	.use(rehypeCheckbox)
 	.use(linkifyMentions)
 	.use(remarkMath)
 	.use(rehypeKatex)
