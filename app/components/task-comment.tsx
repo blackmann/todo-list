@@ -19,6 +19,7 @@ interface TaskCommentProps {
 function TaskComment({ comment, taskId }: TaskCommentProps) {
 	const [isEditing, setIsEditing] = React.useState(false);
 	const [rawContent, setRawContent] = React.useState("");
+	const [isToggling, setIsToggling] = React.useState(false);
 
 	const fetcher = useFetcher<{ content: string }>();
 	const { user } = useLoaderData<typeof loader>();
@@ -55,35 +56,48 @@ function TaskComment({ comment, taskId }: TaskCommentProps) {
 
 	const handleInlineToggle = React.useCallback(
 		async (line: number, checked: boolean) => {
-			const res = await fetch(`/edit-comment?id=${comment.id}`);
-			if (!res.ok) {
-				console.error("Failed to fetch comment for inline toggle");
-				return;
+			try {
+				setIsToggling(true);
+				const res = await fetch(`/edit-comment?id=${comment.id}`);
+				if (!res.ok) {
+					console.error("Failed to fetch comment for inline toggle");
+					return;
+				}
+
+				const data = await res.json();
+
+				const updatedContent = (data.content as string)
+					.split("\n")
+					.map((item, index) => {
+						if (index === line - 1) {
+							return item.replace(
+								TASK_LIST_REPLACE_REGEX,
+								`- [${checked ? "x" : " "}] `,
+							);
+						}
+
+						return item;
+					})
+					.join("\n");
+
+				edit.mutate(
+					{
+						id: comment.id,
+						content: updatedContent,
+						authorId: user.id,
+					},
+					{
+						onSettled: () => {
+							setIsToggling(false);
+						},
+					},
+				);
+			} catch (error) {
+				console.error("Error during inline toggle:", error);
+				setIsToggling(false);
 			}
-
-			const data = await res.json();
-
-			const updatedContent = (data.content as string)
-				.split("\n")
-				.map((item, index) => {
-					if (index === line - 1) {
-						return item.replace(
-							TASK_LIST_REPLACE_REGEX,
-							`- [${checked ? "x" : " "}] `,
-						);
-					}
-
-					return item;
-				})
-				.join("\n");
-
-			edit.mutate({
-				id: comment.id,
-				content: updatedContent,
-				authorId: user.id,
-			});
 		},
-		[edit.mutate, comment.id, user.id],
+		[edit, comment.id, user.id],
 	);
 
 	return (
@@ -118,6 +132,7 @@ function TaskComment({ comment, taskId }: TaskCommentProps) {
 								content={comment.content}
 								rawContent={rawContent}
 								onCheckListItem={handleInlineToggle}
+								isDisabled={isToggling}
 							/>
 						)}
 					</div>
