@@ -5,9 +5,10 @@ interface Props {
 	content: string;
 	rawContent: string;
 	onCheckListItem: (line: number, checked: boolean) => void;
+	isDisabled?: boolean;
 }
 
-function Content({ content, onCheckListItem }: Props) {
+function Content({ content, onCheckListItem, isDisabled = false }: Props) {
 	const ref = React.useRef<HTMLDivElement>(null);
 
 	React.useEffect(() => {
@@ -28,6 +29,11 @@ function Content({ content, onCheckListItem }: Props) {
 
 		for (const checkbox of checkboxes) {
 			checkbox.addEventListener("change", handleCheckboxChange);
+			if (isDisabled) {
+				checkbox.setAttribute("disabled", "true");
+			} else {
+				checkbox.removeAttribute("disabled");
+			}
 		}
 
 		return () => {
@@ -35,7 +41,7 @@ function Content({ content, onCheckListItem }: Props) {
 				checkbox.removeEventListener("change", handleCheckboxChange);
 			}
 		};
-	}, [onCheckListItem]);
+	}, [onCheckListItem, isDisabled]);
 
 	if (!content) return null;
 

@@ -103,11 +103,19 @@ code:not(.shiki code):not(.shiki .line code) {
 }
 
 .comment-article li input[type="checkbox"] {
-	@apply rounded-md bg-stone-200 dark:bg-neutral-500 border border-stone-400 dark:border-neutral-700 focus:ring-0 cursor-pointer w-4 h-4 -mt-1;
+	@apply rounded-md bg-stone-200 dark:bg-neutral-500 border border-stone-400 dark:border-neutral-700 focus:ring-0 cursor-pointer w-4 h-4 ml-1	 -mt-1;
 }
 
 .comment-article li input[type="checkbox"]:checked {
 	@apply bg-blue-600 dark:bg-blue-400 border-blue-600 dark:border-blue-400;
+}
+
+.comment-article li input[type="checkbox"]:disabled {
+    @apply bg-neutral-300 dark:bg-neutral-600 border-neutral-400 dark:border-neutral-700 opacity-70;
+}
+
+.comment-article li input[type="checkbox"]:disabled:checked {
+    @apply bg-neutral-400 dark:bg-neutral-500 border-neutral-400 dark:border-neutral-600;
 }
 
 @keyframes colorchange {
