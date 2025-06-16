@@ -97,7 +97,7 @@ function TaskComment({ comment, taskId }: TaskCommentProps) {
 				setIsToggling(false);
 			}
 		},
-		[edit, comment.id, user.id],
+		[edit.mutate, comment.id, user.id],
 	);
 
 	return (
