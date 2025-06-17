@@ -38,6 +38,7 @@ If a `WEBHOOK_URL` is provided, the endpoint is called with the following events
 | `task.deleted` | Triggered when a task is deleted |
 | `task.status_changed` | Triggered when a task's status changes |
 | `task.assigned` | Triggered when a task is assigned to a user |
+| `task.pinned` | Triggered when a task is pinned or unpinned |
 | `comment.created` | Triggered when a comment is added to a task |
 | `user.joined` | Triggered when a new user joins the system |
 

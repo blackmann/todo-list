@@ -46,9 +46,14 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
 	const tasks = await prisma.task.findMany({
 		where,
-		orderBy: {
-			createdAt: "desc",
-		},
+		orderBy: [
+			{
+				pinned: "desc",
+			},
+			{
+				createdAt: "desc",
+			},
+		],
 		include: {
 			_count: { select: { Comment: true } },
 			assignee: { select: { username: true, id: true } },
@@ -110,6 +115,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 				assigneeId: true,
 				status: true,
 				title: true,
+				pinned: true,
 			},
 		});
 
@@ -117,6 +123,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
 		const previousAssigneeId = previous.assigneeId;
 		const previousStatus = previous.status;
+		const previousPinned = previous.pinned;
 
 		const task = await prisma.task.update({
 			where: { id },
@@ -138,6 +145,15 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 				task,
 				user,
 				previousStatus,
+				projectId: task.projectId,
+			});
+		}
+
+		if (previousPinned !== updates.pinned) {
+			sendWebhook("task.pinned", {
+				task,
+				user,
+				pinned: updates.pinned,
 				projectId: task.projectId,
 			});
 		}
