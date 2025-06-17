@@ -18,6 +18,11 @@ const statuses: StatusProps[] = [
 		icon: <div className="i-lucide-loader-circle text-amber-500" />,
 	},
 	{
+		id: "inReview",
+		label: "In Review",
+		icon: <div className="i-solar-document-add-linear text-green-500" />,
+	},
+	{
 		id: "done",
 		label: "Done",
 		icon: <div className="i-solar-check-circle-bold text-indigo-500" />,

@@ -51,5 +51,3 @@ To set up Discord notifications:
 2. Set `WEBHOOK_URL` to `https://<your-todolist-domain>/webhook/discord`
 
 Voila, your discord server will start receiving events.
-
-

@@ -56,6 +56,11 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 		},
 	});
 
+	const installation = await prisma.installation.findFirst({
+		where: { userId: access.user.id },
+		select: { githubInstallationId: true, active: true },
+	});
+
 	return {
 		done: Number(done),
 		total: Number(total),
@@ -63,6 +68,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 		users,
 		project: access.project!,
 		unreadNotifications,
+		installation,
 	};
 };
 
