@@ -33,3 +33,25 @@ async function updateCommentRequest({
 
 	return data.comment;
 }
+
+export async function removeMedia(ids: number[]): Promise<void> {
+	const res = await fetch("/media", {
+		method: "PATCH",
+		headers: { "Content-Type": "application/json" },
+		body: JSON.stringify({ ids }),
+	});
+
+	if (!res.ok) throw new Error("Failed to remove media");
+}
+
+export function useRemoveMedia(taskId: number) {
+	const queryClient = useQueryClient();
+
+	return useMutation({
+		mutationFn: removeMedia,
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: ["comments", taskId] });
+			queryClient.invalidateQueries({ queryKey: ["comment-content"] });
+		},
+	});
+}

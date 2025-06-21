@@ -45,6 +45,7 @@ function InviteCard({ onClose }: InviteCardProps) {
 
 				<div className="flex flex-col gap-0">
 					<CopyButton
+						className="flex items-center justify-center bg-neutral-700 text-white dark:bg-white dark:text-neutral-900 px-3 !py-1 gap-1"
 						text={inviteLink}
 						disabled={fetcher.state !== "idle" || !token}
 					/>

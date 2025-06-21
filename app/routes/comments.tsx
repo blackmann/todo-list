@@ -1,3 +1,4 @@
+import type { Media } from "@prisma/client";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
 import { type CreateMentionOpts, createMentions } from "~/lib/mentions.server";
 import { prisma } from "~/lib/prisma.server";
@@ -21,9 +22,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
 			createdAt: "asc",
 		},
 		include: {
+			Media: true,
 			author: {
 				select: {
-					id: true,
 					username: true,
 				},
 			},
@@ -64,15 +65,24 @@ export async function action({ request }: ActionFunctionArgs) {
 			},
 		});
 
+		await prisma.media.deleteMany({
+			where: {
+				commentId: comment.id,
+			},
+		});
+
 		comment.content = await render(comment.content);
 
 		return { comment };
 	}
 
-	const data = await request.json();
+	const { media, content, ...data } = await request.json();
 
 	const comment = await prisma.comment.create({
-		data,
+		data: {
+			...data,
+			content,
+		},
 		include: {
 			author: {
 				omit: {
@@ -86,6 +96,19 @@ export async function action({ request }: ActionFunctionArgs) {
 			},
 		},
 	});
+
+	if (media && media.length > 0) {
+		await prisma.media.createMany({
+			data: media.map((it: Media) => ({
+				url: it.url,
+				filename: it.filename,
+				size: it.size,
+				contentType: it.contentType,
+				commentId: comment.id,
+				thumbnail: it.thumbnail,
+			})),
+		});
+	}
 
 	const opts: CreateMentionOpts = {
 		content: comment.content,
@@ -108,6 +131,7 @@ export async function action({ request }: ActionFunctionArgs) {
 			user: comment.author,
 			comment: comment.content,
 			projectId: task.projectId,
+			mediaCount: media ? media.length : 0,
 		});
 	}
 
