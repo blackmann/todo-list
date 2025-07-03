@@ -11,6 +11,7 @@ interface StatusProps {
 const StatusIcons: Record<Task["status"], string> = {
 	pending: "i-lucide-circle text-secondary",
 	inProgress: "i-lucide-loader-circle text-amber-500",
+	inReview: "i-solar-document-add-linear text-green-500",
 	done: "i-solar-check-circle-linear text-stone-400 dark:text-neutral-700",
 };
 
