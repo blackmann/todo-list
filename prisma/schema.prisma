@@ -70,6 +70,21 @@ model Comment {
 
   editedAt  DateTime?
   deletedAt DateTime?
+
+  Media Media[]
+}
+
+model Media {
+  id          Int      @id @default(autoincrement())
+  url         String
+  thumbnail   String?
+  filename    String
+  contentType String
+  size        Int
+  duration    Int?
+  commentId   Int
+  comment     Comment  @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
 }
 
 model User {

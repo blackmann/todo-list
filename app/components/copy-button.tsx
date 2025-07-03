@@ -6,10 +6,12 @@ function CopyButton({
 	text,
 	className,
 	disabled,
+	children,
 }: {
 	text: string;
 	className?: string;
 	disabled?: boolean;
+	children?: React.ReactNode;
 }) {
 	const [copyStatus, setCopyStatus] = React.useState<"failed" | "copied">();
 
@@ -29,13 +31,10 @@ function CopyButton({
 	return (
 		<Button
 			onClick={handleCopy}
-			className={clsx(
-				"w-full text-sm font-medium flex items-center justify-center bg-neutral-700 text-white dark:bg-white dark:text-neutral-900 px-3 !py-1 gap-1",
-				className,
-			)}
+			className={clsx("text-sm font-medium", className)}
 			disabled={disabled}
 		>
-			{copyStatus === "copied" ? "Copied" : "Copy"}{" "}
+			{children || (copyStatus === "copied" ? "Copied" : "Copy")}{" "}
 			<div
 				className={clsx(
 					copyStatus === "copied"

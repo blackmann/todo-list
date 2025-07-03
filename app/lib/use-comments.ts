@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import type { Media } from "~/components/comment-composer";
 import type { Comment } from "./types";
 
 export async function fetchComments(taskId: number): Promise<Comment[]> {
@@ -10,7 +11,9 @@ export async function fetchComments(taskId: number): Promise<Comment[]> {
 	return data.comments;
 }
 
-type CreatePayload = Pick<Comment, "taskId" | "content" | "authorId">;
+type CreatePayload = Pick<Comment, "taskId" | "content" | "authorId"> & {
+	media: Media[];
+};
 
 export async function createComment(payload: CreatePayload): Promise<Comment> {
 	const res = await fetch("/comments", {

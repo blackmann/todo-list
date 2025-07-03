@@ -1,11 +1,11 @@
+import type { Prisma } from "@prisma/client";
 import clsx from "clsx";
 import React from "react";
 import { useFetcher, useLoaderData } from "react-router";
 import { TASK_LIST_REPLACE_REGEX } from "~/lib/constants";
 import { authorTime } from "~/lib/dates";
-import type { Comment } from "~/lib/types";
 import { useCommentDelete } from "~/lib/use-comment-delete";
-import { useCommentEdit } from "~/lib/use-comments-edit";
+import { useCommentEdit, useRemoveMedia } from "~/lib/use-comments-edit";
 import type { loader } from "~/routes/$project";
 import { CommentMenu } from "./comment-menu";
 import { Content } from "./content";
@@ -13,7 +13,16 @@ import { EditCommentInput } from "./edit-comment-input";
 
 interface TaskCommentProps {
 	taskId: number;
-	comment: Comment;
+	comment: Prisma.CommentGetPayload<{
+		include: {
+			Media: true;
+			author: {
+				select: {
+					username: true;
+				};
+			};
+		};
+	}>;
 }
 
 function TaskComment({ comment, taskId }: TaskCommentProps) {
@@ -26,6 +35,7 @@ function TaskComment({ comment, taskId }: TaskCommentProps) {
 
 	const edit = useCommentEdit(taskId);
 	const remove = useCommentDelete(taskId);
+	const removeMedia = useRemoveMedia(taskId);
 
 	React.useEffect(() => {
 		if (isEditing && !rawContent && !fetcher.data) {
@@ -40,8 +50,6 @@ function TaskComment({ comment, taskId }: TaskCommentProps) {
 	}, [fetcher.data]);
 
 	function handleEdit() {
-		if (!rawContent.trim()) return;
-
 		const updatedContent = rawContent.trim();
 		setRawContent(updatedContent);
 
@@ -122,14 +130,18 @@ function TaskComment({ comment, taskId }: TaskCommentProps) {
 							</p>
 						) : isEditing ? (
 							<EditCommentInput
+								media={comment.Media}
 								value={rawContent}
 								onChange={setRawContent}
 								onConfirm={handleEdit}
-								onCancel={() => setIsEditing(false)}
+								onCancel={() => {
+									setIsEditing(false);
+								}}
+								onRemoveMedia={(ids) => removeMedia.mutate(ids)}
 							/>
 						) : (
 							<Content
-								content={comment.content}
+								comment={comment}
 								rawContent={rawContent}
 								onCheckListItem={handleInlineToggle}
 								isDisabled={isToggling}

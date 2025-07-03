@@ -237,8 +237,10 @@ async function createWebhookPayload(
 		}
 
 		case "comment.created": {
-			const { task, user, comment } = event as WebhookEvent<"comment.created">;
-			if (!task || !comment) break;
+			const { task, user, comment, mediaCount } =
+				event as WebhookEvent<"comment.created">;
+
+			if (!task || (!comment && (!mediaCount || mediaCount === 0))) break;
 
 			embed.title = "💬 New Comment";
 			embed.description = `On task: ${task.title} \`#${task.id}\``;
@@ -246,13 +248,29 @@ async function createWebhookPayload(
 				embed.url = projectUrl;
 			}
 
+			let fieldValue = "";
+
+			if (comment?.trim()) {
+				const commentText =
+					comment.length > 1018 ? `${comment.substring(0, 1015)}...` : comment;
+				fieldValue = commentText;
+			}
+
+			if (mediaCount && mediaCount > 0) {
+				const attachmentText = `📎 ${mediaCount} attachment${mediaCount === 1 ? "" : "s"}`;
+
+				if (fieldValue) {
+					fieldValue += `\n${attachmentText}`;
+				} else {
+					fieldValue = attachmentText;
+					embed.title = "📎 New Attachment";
+				}
+			}
+
 			embed.fields = [
 				{
-					name: "Comment",
-					value:
-						comment.length > 1018
-							? `${comment.substring(0, 1015)}...`
-							: `${comment}`,
+					name: comment?.trim() ? "Comment" : "Attachment",
+					value: fieldValue,
 				},
 			];
 

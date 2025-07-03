@@ -49,6 +49,7 @@ export type WebhookPayload = {
 		user?: SafeUser;
 		comment: string;
 		projectId: number;
+		mediaCount?: number;
 	};
 
 	"user.joined": {
