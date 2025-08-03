@@ -1,6 +1,7 @@
 import { tryit } from 'radashi';
 import { type LoaderFunctionArgs, redirect } from "react-router";
 import { checkAuth } from "~/lib/check-auth";
+import { userPrefs } from "~/lib/cookies.server";
 import { prisma } from "~/lib/prisma.server";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
@@ -30,8 +31,20 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
 	const url = new URL(request.url);
 
-	const top = projects[0];
-	const toUrl = new URL(`/${top.slug}`, url);
+	// 🎯 READ: Get the user's last viewed project from cookie
+	const cookieHeader = request.headers.get("Cookie");
+	const prefs = (await userPrefs.parse(cookieHeader)) || {};
+	const lastProjectSlug = prefs.lastProject;
+
+	// Check if the last viewed project still exists and user has access to it
+	let targetProject = projects.find(p => p.slug === lastProjectSlug);
+	
+	// Fall back to first project if last viewed project is not found
+	if (!targetProject) {
+		targetProject = projects[0];
+	}
+
+	const toUrl = new URL(`/${targetProject.slug}`, url);
 	const confetti = url.searchParams.get("confetti");
 
 	if (confetti) {

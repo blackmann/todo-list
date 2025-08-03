@@ -9,7 +9,7 @@ import {
 
 export default defineConfig({
 	content: {
-		filesystem: ["**/*.{html,js,ts,jsx,tsx,vue,svelte,astro}"],
+		filesystem: ["app/**/*.{ts,tsx,js,jsx}"],
 	},
 	presets: [presetWind3({ dark: "media" }), presetIcons(), presetForms()],
 	transformers: [transformerDirectives(), transformerVariantGroup()],

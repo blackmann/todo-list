@@ -1,18 +1,24 @@
 import type { LoaderFunctionArgs } from "react-router";
+import { redirect } from "react-router";
+import { tryit } from "radashi";
 import { checkAuth } from "~/lib/check-auth";
 import { prisma } from "~/lib/prisma.server";
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
-	await checkAuth(request);
+  const [err] = await tryit(checkAuth)(request);
 
-	await prisma.notification.update({
-		where: {
-			id: Number(params.id),
-		},
-		data: {
-			read: true,
-		},
-	});
+  if (err) {
+    throw redirect("/auth");
+  }
 
-	return { read: true };
+  await prisma.notification.update({
+    where: {
+      id: Number(params.id),
+    },
+    data: {
+      read: true,
+    },
+  });
+
+  return { read: true };
 };

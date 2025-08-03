@@ -2,13 +2,15 @@ import { tryit } from "radashi";
 import {
 	type LoaderFunctionArgs,
 	type MetaFunction,
-	redirect
+	redirect,
+	data
 } from "react-router";
 import { BabyGlinConfetti } from "~/components/baby-glin-confetti";
 import { Header } from "~/components/header";
 import { StatusBar } from "~/components/status-bar";
 import { Todos } from "~/components/todos";
 import { checkAccess } from "~/lib/check-auth";
+import { userPrefs } from "~/lib/cookies.server";
 import { prisma } from "~/lib/prisma.server";
 import { notFound } from "~/lib/responses";
 
@@ -24,9 +26,9 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 	const [err, access] = await tryit(checkAccess)(request, params.project!);
 
 	if (err) {
-		if ("data" in err) throw err;
+		if (err instanceof Response) throw err;
 
-		return redirect("/auth");
+		throw redirect("/auth");
 	}
 
 	const users = await prisma.user.findMany({
@@ -56,14 +58,22 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 		},
 	});
 
-	return {
+	const cookieHeader = request.headers.get("Cookie");
+	const currentPrefs = (await userPrefs.parse(cookieHeader)) || {};
+	const updatedPrefs = { ...currentPrefs, lastProject: params.project };
+
+	return data({
 		done: Number(done),
 		total: Number(total),
 		user: access.user,
 		users,
 		project: access.project!,
 		unreadNotifications,
-	};
+	}, {
+		headers: {
+			"Set-Cookie": await userPrefs.serialize(updatedPrefs),
+		},
+	});
 };
 
 export const meta: MetaFunction = () => {
