@@ -8,6 +8,8 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 	const [err, user] = await tryit(checkAuth)(request);
 
 	if (err) {
+		if (err instanceof Response) throw err;
+
 		throw unauthorized();
 	}
 

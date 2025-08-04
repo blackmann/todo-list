@@ -1,31 +1,37 @@
 import { addHours } from "date-fns";
 import { customAlphabet } from "nanoid";
 import type { LoaderFunctionArgs } from "react-router";
+import { redirect } from "react-router";
+import { tryit } from "radashi";
 import { checkAuth } from "~/lib/check-auth";
 import { prisma } from "~/lib/prisma.server";
 import { unauthorized } from "~/lib/responses";
 
 const generateToken = customAlphabet(
-	"abcde0123456789fghijklmnABCDEFGHNOPopqrstWXYZuvwxyz",
-	10,
+  "abcde0123456789fghijklmnABCDEFGHNOPopqrstWXYZuvwxyz",
+  10
 );
 
-export const loader = async ({  request }: LoaderFunctionArgs) => {
-	const user = await checkAuth(request);
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+  const [err, user] = await tryit(checkAuth)(request);
 
-	if (!user.superUser) {
-		throw unauthorized();
-	}
+  if (err) {
+    throw redirect("/auth");
+  }
 
-	const expiresAt = addHours(new Date(), 12);
-	const token = generateToken();
+  if (!user.superUser) {
+    throw unauthorized();
+  }
 
-	const url = new URL(request.url);
-	const project = url.searchParams.get("project");
+  const expiresAt = addHours(new Date(), 12);
+  const token = generateToken();
 
-	await prisma.inviteToken.create({
-		data: { token, expiresAt, project: { connect: { slug: project! } } },
-	});
+  const url = new URL(request.url);
+  const project = url.searchParams.get("project");
 
-	return { token };
+  await prisma.inviteToken.create({
+    data: { token, expiresAt, project: { connect: { slug: project! } } },
+  });
+
+  return { token };
 };

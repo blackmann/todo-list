@@ -24,9 +24,9 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 	const [err, access] = await tryit(checkAccess)(request, params.project!);
 
 	if (err) {
-		if ("data" in err) throw err;
+		if (err instanceof Response) throw err;
 
-		return redirect("/auth");
+		throw redirect("/auth");
 	}
 
 	const users = await prisma.user.findMany({
